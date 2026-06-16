@@ -53,7 +53,7 @@ graph TD
     subgraph Step 1: Insert at End
         i1((10)) --> i2((15))
         i1 --> i3((30))
-        i3 --> i4((New: 5))
+        i3 --> i4(("New: 5"))
         style i4 fill:#f43f5e,color:#fff
     end
     subgraph Step 2: Swap Up (Final)

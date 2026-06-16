@@ -72,6 +72,53 @@ graph LR
 
 ---
 
+## Advanced Stack Variations
+
+### 3. Min Stack (getMin)
+A Min Stack supports pushing, popping, and retrieving the minimum element in $O(1)$ time. This is typically achieved by maintaining an auxiliary stack that tracks the minimums.
+
+```mermaid
+graph TD
+    subgraph Main Stack
+        M3[Top: 5] --> M2[3]
+        M2 --> M1[Bottom: 7]
+        style M2 fill:#06b6d4,color:#fff
+    end
+    subgraph Min Stack
+        S3[Top: 3] --> S2[3]
+        S2 --> S1[Bottom: 7]
+        style S3 fill:#8b5cf6,color:#fff
+    end
+    M2 -.-> S3
+```
+- **Push(X)**: Push `X` to Main Stack. If `X <= top` of Min Stack, push `X` to Min Stack.
+- **Pop()**: Pop from Main Stack. If popped value equals top of Min Stack, pop from Min Stack.
+
+### 4. Two Stacks in an Array
+Implementing two stacks in a single array by starting from opposite ends to maximize space utilization.
+- `Stack 1` grows from index `0` upwards.
+- `Stack 2` grows from index `N-1` downwards.
+
+```mermaid
+graph LR
+    subgraph TwoStack Array
+        S1_1[S1: E1] --> S1_2[S1: E2]
+        S1_2 --> Empty1[" ... "]
+        Empty1 --> Empty2[" ... "]
+        Empty2 --> S2_2[S2: E4]
+        S2_2 --> S2_1[S2: E3]
+        style S1_1 fill:#8b5cf6,color:#fff
+        style S1_2 fill:#8b5cf6,color:#fff
+        style S2_1 fill:#f43f5e,color:#fff
+        style S2_2 fill:#f43f5e,color:#fff
+    end
+```
+- **push1(X)**: If `top1 < top2 - 1`, increment `top1` and insert `X`.
+- **push2(X)**: If `top1 < top2 - 1`, decrement `top2` and insert `X`.
+- **Overflow**: Occurs only when `top1 + 1 == top2`.
+
+---
+
 ## Java Implementation Examples
 
 ### Array-Based Stack

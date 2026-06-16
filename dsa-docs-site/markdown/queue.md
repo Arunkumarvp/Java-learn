@@ -80,6 +80,63 @@ graph TD
 
 ---
 
+## Advanced Queue Variations
+
+### 3. Deque (Double Ended Queue)
+A Deque allows insertion and deletion from **both** the Front and the Rear.
+
+```mermaid
+graph LR
+    subgraph Deque Operations
+        direction LR
+        InFront(("Insert Front")) --> d1[Element 1]
+        d1 --> OutFront(("Delete Front"))
+        
+        InRear(("Insert Rear")) --> dN[Element N]
+        dN --> OutRear(("Delete Rear"))
+        
+        d1 -.-> d2["[...]"]
+        d2 -.-> dN
+        
+        style InFront fill:#10b981,color:#fff
+        style OutFront fill:#f43f5e,color:#fff
+        style InRear fill:#10b981,color:#fff
+        style OutRear fill:#f43f5e,color:#fff
+    end
+```
+- **insertFront()**: Adds an element to the front of the deque.
+- **insertRear()**: Adds an element to the rear of the deque.
+- **deleteFront()**: Removes the front element.
+- **deleteRear()**: Removes the rear element.
+
+### 4. Priority Queue
+Elements are enqueued with a **priority value**. Dequeue operations always remove the element with the highest priority first, regardless of when it was enqueued.
+
+```mermaid
+graph TD
+    subgraph Enqueue Phase
+        A["New Task: Prio 5"] --> Q1
+        B["New Task: Prio 1"] --> Q1
+        C["New Task: Prio 9"] --> Q1
+    end
+    
+    subgraph Priority Queue Internal State
+        Q1[Queue] --> Sorted[Sorted by Priority]
+        Sorted --> T1["Task: Prio 9"]
+        Sorted --> T2["Task: Prio 5"]
+        Sorted --> T3["Task: Prio 1"]
+        style T1 fill:#8b5cf6,color:#fff
+    end
+    
+    subgraph Dequeue Phase
+        T1 --> Out[Highest Priority dequeued first]
+    end
+```
+- **Insert / Enqueue**: Adds the item based on its priority.
+- **Delete / Dequeue**: Extracts the maximum (or minimum) priority element. Typically implemented using a Heap data structure for $O(\log N)$ efficiency.
+
+---
+
 ## Java Implementation Example
 
 ### Circular Queue (Array-Based)

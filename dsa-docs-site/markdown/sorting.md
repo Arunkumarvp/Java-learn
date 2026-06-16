@@ -47,12 +47,11 @@ Choose pivot (e.g. `4`), partition array so all elements smaller than `4` go to 
 graph LR
     subgraph Before Partitioning
         direction LR
-        p1[3] --- p2[5] --- p3[2] --- p4[1] --- pivot((Pivot: 4))
-        style pivot fill:#8b5cf6,color:#fff
+        p1[3] --- p2[5] --- p3[2] --- p4[1] --- pivot(("Pivot: 4"))
     end
-    subgraph After Partitioning
+    subgraph After Partition
         direction LR
-        L[3, 2, 1] --- pivotB((Pivot: 4)) --- R[5]
+        L[3, 2, 1] --- pivotB(("Pivot: 4")) --- R[5]
         style pivotB fill:#06b6d4,color:#fff
     end
 ```

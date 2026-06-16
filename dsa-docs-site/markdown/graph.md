@@ -67,9 +67,9 @@ Exploring neighbors level-by-level starting from `A`:
 
 ```mermaid
 graph TD
-    step1(Start A: Queue=[B,C]) --> step2(Visit B: Queue=[C,D])
-    step2 --> step3(Visit C: Queue=[D])
-    step3 --> step4(Visit D: Queue=[])
+    step1("Start A: Queue=[B,C]") --> step2("Visit B: Queue=[C,D]")
+    step2 --> step3("Visit C: Queue=[D]")
+    step3 --> step4("Visit D: Queue=[]")
 ```
 
 ### 2. DFS Traversal (Deep Dive)
@@ -83,6 +83,57 @@ graph LR
     D -->|3| C((C))
     style A fill:#8b5cf6,color:#fff
     style C fill:#06b6d4,color:#fff
+```
+
+---
+
+## Advanced Graph Algorithms
+
+Based on your implementation, here are diagrams explaining the logic behind your advanced graph operations.
+
+### 3. Shortest Path (Unweighted Graph)
+To find the shortest path from a source node to all other nodes in an unweighted graph, we use **BFS**. As we visit each neighbor, we record its distance as `distance[parent] + 1` and track its predecessor.
+
+```mermaid
+graph LR
+    subgraph Distance Calculation
+        S(("Start (Dist: 0)")) -->|Dist: 1| A(("A (Dist: 1)"))
+        S -->|Dist: 1| B(("B (Dist: 1)"))
+        A -->|Dist: 2| C(("C (Dist: 2)"))
+        B -->|Dist: 2| C
+        style S fill:#10b981,color:#fff
+        style C fill:#f43f5e,color:#fff
+    end
+```
+
+### 4. Cycle Detection (`hasCycle`)
+A cycle exists if we visit a node that is already marked as `visited`, and it is **not** the parent of the current node (in undirected graphs).
+
+```mermaid
+graph TD
+    subgraph Cycle Exists!
+        A(("A")) --> B(("B"))
+        B --> C(("C"))
+        C -.->|Back-edge| A
+        style C fill:#f43f5e,color:#fff
+    end
+```
+
+### 5. Connected Components (`connectedComponents`)
+If a graph is disconnected, a single BFS/DFS will not visit all nodes. We loop through all vertices, and for every unvisited vertex, we launch a new traversal, counting it as a new component.
+
+```mermaid
+graph LR
+    subgraph Component 1
+        1(("1")) --- 2(("2"))
+    end
+    subgraph Component 2
+        3(("3")) --- 4(("4"))
+        4 --- 5(("5"))
+    end
+    subgraph Component 3
+        6(("6"))
+    end
 ```
 
 ---

@@ -45,7 +45,7 @@ graph TD
         n50 --> n70((70))
         n30 --> n20((20))
         n30 -->|35 > 30| n40((40))
-        n40 -->|35 < 40| n35((New: 35))
+        n40 -->|35 < 40| n35(("New: 35"))
         style n35 fill:#06b6d4,color:#fff
     end
 ```
@@ -67,6 +67,23 @@ graph LR
         direction TB
         a50((50)) --> a40((40))
         a40 --> a20((20))
+    end
+```
+
+### 3. Finding Min and Max Values
+Because of the BST invariant, finding the minimum and maximum values does not require searching the whole tree.
+- **`min()`**: Simply traverse down the **left** children until you reach a node with no left child.
+- **`max()`**: Simply traverse down the **right** children until you reach a node with no right child.
+
+```mermaid
+graph TD
+    subgraph Min and Max Tracking
+        R(("Root: 50")) --> L1(("L: 30"))
+        R --> R1(("R: 70"))
+        L1 --> L2(("Min: 20"))
+        R1 --> R2(("Max: 80"))
+        style L2 fill:#10b981,color:#fff
+        style R2 fill:#f43f5e,color:#fff
     end
 ```
 

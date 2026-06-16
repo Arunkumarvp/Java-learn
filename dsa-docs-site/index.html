@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Learning Hub</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>DSA Hub</h2>
+                <p>Data Structures & Algorithms</p>
+            </div>
+            
+            <div class="nav-section">
+                <h3>OVERVIEW</h3>
+                <ul class="nav-list">
+                    <li><a href="#" data-doc="markdown/welcome.md" class="active">Welcome Guide</a></li>
+                    <li><a href="#" data-doc="markdown/operations.md">All Operations</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h3>LINEAR STRUCTURES</h3>
+                <ul class="nav-list">
+                    <li><a href="#" data-doc="markdown/linked_list.md">Linked List</a></li>
+                    <li><a href="#" data-doc="markdown/stack.md">Stack</a></li>
+                    <li><a href="#" data-doc="markdown/queue.md">Queue</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h3>NON-LINEAR STRUCTURES</h3>
+                <ul class="nav-list">
+                    <li><a href="#" data-doc="markdown/binary_tree.md">Binary Tree</a></li>
+                    <li><a href="#" data-doc="markdown/bst.md">Binary Search Tree</a></li>
+                    <li><a href="#" data-doc="markdown/avl_tree.md">AVL Tree</a></li>
+                    <li><a href="#" data-doc="markdown/heap.md">Heap</a></li>
+                    <li><a href="#" data-doc="markdown/graph.md">Graph</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h3>ALGORITHMS</h3>
+                <ul class="nav-list">
+                    <li><a href="#" data-doc="markdown/searching.md">Searching</a></li>
+                    <li><a href="#" data-doc="markdown/sorting.md">Sorting</a></li>
+                    <li><a href="#" data-doc="markdown/recursion.md">Recursion</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h3>PROBLEM SOLVING</h3>
+                <ul class="nav-list">
+                    <li><a href="#" data-doc="markdown/array.md">Arrays</a></li>
+                    <li><a href="#" data-doc="markdown/pattern.md">Pattern Concepts</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h3>100 PATTERNS</h3>
+                <ul class="nav-list">
+                    <li><a href="#" data-doc="markdown/patterns_1_25.md">Patterns 1 to 25</a></li>
+                    <li><a href="#" data-doc="markdown/patterns_26_50.md">Patterns 26 to 50</a></li>
+                    <li><a href="#" data-doc="markdown/patterns_51_75.md">Patterns 51 to 75</a></li>
+                    <li><a href="#" data-doc="markdown/patterns_76_100.md">Patterns 76 to 100</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <div id="loading" class="hidden">
+                <div class="spinner"></div>
+                <p>Loading document...</p>
+            </div>
+            <div id="error" class="hidden">
+                <h2>Document Not Found</h2>
+                <p>Could not load the requested markdown file. Ensure the server is running and the file exists.</p>
+            </div>
+            <article id="markdown-body" class="markdown-body">
+                <!-- Markdown content will be injected here -->
+            </article>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: false,
+            theme: 'dark',
+            securityLevel: 'loose'
+        });
+        window.mermaid = mermaid;
+    </script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -11,9 +11,9 @@ If the balance factor of any node becomes $\ge 2$ or $\le -2$, the tree is rebal
 
 ```mermaid
 graph TD
-    Root((30 [bf=0])) --> L1((20 [bf=0]))
-    Root --> R1((40 [bf=-1]))
-    R1 --> R2_2((50 [bf=0]))
+    Root(("30 [bf=0]")) --> L1(("20 [bf=0]"))
+    Root --> R1(("40 [bf=-1]"))
+    R1 --> R2_2(("50 [bf=0]"))
     style Root fill:#8b5cf6,stroke:#333,stroke-width:2px,color:#fff
     style L1 fill:#1e293b,color:#fff
     style R2_2 fill:#1e293b,color:#fff
@@ -57,8 +57,8 @@ A node is inserted in the right subtree of the left child.
 ```mermaid
 graph TD
     subgraph Imbalanced (LR)
-        z((3 [BF=2])) --> y((1 [BF=-1]))
-        y --> x((2))
+        z(("3 [BF=2]")) --> y(("1 [BF=-1]"))
+        y --> x(("2"))
         style z fill:#f43f5e,color:#fff
     end
     subgraph Step 1: Left Rotate Child y
