@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaBot AI Tutor — Offline 24/7 | DSA Hub</title>
+  <meta name="description" content="Offline AI Java tutor powered by Qwen2.5-Coder via Ollama. Ask anything about Java, DSA, algorithms, and coding interviews — no cloud, no internet required.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tutor.css">
+</head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <div class="tutor-shell">
+
+    <!-- ── Header ─────────────────────────────────────────────── -->
+    <header class="tutor-header">
+      <div class="header-left">
+        <a href="index.html" class="back-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          DSA Hub
+        </a>
+        <div class="bot-avatar">🤖</div>
+        <div class="bot-info">
+          <h1>JavaBot AI Tutor</h1>
+          <p>
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusText">Detecting backend...</span>
+          </p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="backend-badge hidden" id="backendBadge"></div>
+        <div class="model-select-wrap hidden" id="modelSelectWrap">
+          <select id="modelSelect" class="model-select" title="Switch model"></select>
+        </div>
+        <button class="icon-btn" id="btnClear" title="Clear conversation" style="display:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ── Loading / Detection Screen ────────────────────────── -->
+    <div class="load-screen" id="loadScreen">
+      <div class="load-icon">🔍</div>
+      <div class="load-title">Detecting AI backend<span class="ellipsis"></span></div>
+      <p class="load-subtitle">Checking for Ollama local service...</p>
+      <div class="progress-wrap">
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">Starting up...</div>
+      </div>
+    </div>
+
+    <!-- ── Setup Guide (shown when Ollama not found) ─────────── -->
+    <div class="setup-screen hidden" id="setupScreen">
+      <div class="setup-card">
+        <div class="setup-icon">⚙️</div>
+        <h2 class="setup-title">One-time Setup Required</h2>
+        <p class="setup-sub">Ollama is not running. Install it once to get fast, offline AI tutoring.</p>
+
+        <div class="setup-steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-label">Install Ollama (30 seconds)</div>
+              <div class="code-copy-wrap">
+                <code class="setup-code" id="installCmd">curl -fsSL https://ollama.ai/install.sh | sh</code>
+                <button class="copy-btn" data-copy="installCmd" title="Copy">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+              </div>
+              <div class="setup-note">Windows? Double-click <code>setup-tutor.bat</code></div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-label">Pull the Java tutor model</div>
+              <div class="code-copy-wrap">
+                <code class="setup-code" id="pullCmd">ollama pull qwen2.5-coder:1.5b</code>
+                <button class="copy-btn" data-copy="pullCmd" title="Copy">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+              </div>
+              <div class="setup-note">~1.2 GB download · Cached forever · ~1.2 GB RAM usage</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-label">Start Ollama (if not auto-started)</div>
+              <div class="code-copy-wrap">
+                <code class="setup-code" id="serveCmd">ollama serve</code>
+                <button class="copy-btn" data-copy="serveCmd" title="Copy">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="setup-actions">
+          <button class="retry-btn" id="retryBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            Check Again
+          </button>
+          <button class="webllm-btn" id="webllmBtn">
+            🌐 Use Browser Fallback Instead
+          </button>
+        </div>
+        <p class="setup-hint">Or run <code>./setup-tutor.sh</code> to automate all steps above.</p>
+      </div>
+    </div>
+
+    <!-- ── WebLLM Loading Screen ─────────────────────────────── -->
+    <div class="webllm-screen hidden" id="webllmScreen">
+      <div class="load-icon" style="font-size:2rem">🌐</div>
+      <div class="load-title">Loading Browser Model</div>
+      <p class="load-subtitle">Downloading Qwen2.5-Coder-1.5B into your browser. One-time download, cached forever.</p>
+      <div class="progress-wrap" style="max-width:420px;width:100%">
+        <div class="progress-label-row">
+          <span id="webllmLabel">Downloading...</span>
+          <span id="webllmPct">0%</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="webllmFill"></div>
+        </div>
+        <div class="progress-text" id="webllmText"></div>
+      </div>
+      <div class="load-note">💡 After this download, it works 100% offline — even without WiFi.</div>
+    </div>
+
+    <!-- ── Error Screen ──────────────────────────────────────── -->
+    <div class="error-screen hidden" id="errorScreen">
+      <div class="error-icon">⚠️</div>
+      <h2>Could not load AI tutor</h2>
+      <p id="errorMsg"></p>
+      <button class="retry-btn" id="errorRetryBtn">↺ Try Again</button>
+    </div>
+
+    <!-- ── Chat Area ─────────────────────────────────────────── -->
+    <div class="chat-area hidden" id="chatArea">
+
+      <!-- Quick Prompts -->
+      <div class="quick-prompts" id="quickPrompts">
+        <button class="quick-btn" data-prompt="Explain recursion in Java with a factorial and Fibonacci example, showing the call stack">🔄 Recursion</button>
+        <button class="quick-btn" data-prompt="How does HashMap work internally in Java? Explain hashing, collision resolution, and load factor with code">🗺️ HashMap</button>
+        <button class="quick-btn" data-prompt="Explain Big O notation with real Java examples for O(1), O(n), O(n log n), and O(n²)">📊 Big O</button>
+        <button class="quick-btn" data-prompt="Write a complete Binary Search Tree in Java with insert, search, and inorder traversal">🌳 BST</button>
+        <button class="quick-btn" data-prompt="Implement Merge Sort in Java and explain its time and space complexity step by step">🔀 Merge Sort</button>
+        <button class="quick-btn" data-prompt="What is the difference between Stack and Queue? Show both implementations in Java">📚 Stack vs Queue</button>
+        <button class="quick-btn" data-prompt="Explain Java OOP: classes, objects, inheritance, polymorphism, encapsulation, and abstraction with code examples">☕ OOP Concepts</button>
+        <button class="quick-btn" data-prompt="Implement a singly linked list in Java with add, delete, and search operations">🔗 Linked List</button>
+      </div>
+
+      <!-- Messages -->
+      <div class="messages-wrap" id="messagesWrap">
+        <div class="welcome-msg" id="welcomeMsg">
+          <div class="welcome-emoji">👋</div>
+          <h2>Hello! I'm <span>JavaBot</span></h2>
+          <p>Your offline Java & DSA tutor, powered by Qwen2.5-Coder running locally on your machine. Ask me anything!</p>
+          <div class="welcome-chips">
+            <span class="welcome-chip">Java OOP</span>
+            <span class="welcome-chip">Data Structures</span>
+            <span class="welcome-chip">Algorithms</span>
+            <span class="welcome-chip">Interview Prep</span>
+            <span class="welcome-chip">Complexity Analysis</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input -->
+      <div class="input-area">
+        <div class="input-wrap">
+          <textarea
+            id="chatInput"
+            placeholder="Ask about Java, DSA, algorithms, interview problems..."
+            rows="1"
+            maxlength="2000"
+          ></textarea>
+          <button class="send-btn" id="sendBtn" disabled title="Send message">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="input-hint">
+          <span><kbd>Enter</kbd> send · <kbd>Shift+Enter</kbd> new line</span>
+          <span id="tokenRate" class="token-rate hidden"></span>
+          <span id="charCount">0/2000</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- tutor-config.js is auto-generated by start.sh/start.ps1 with system specs -->
+  <script src="js/tutor-config.js" onerror="window.TUTOR_CONFIG={}"></script>
+  <script src="js/ai-tutor.js"></script>
+  <script>
+  (() => {
+    // ── Element refs ──────────────────────────────────────────────────
+    const $ = id => document.getElementById(id);
+    const loadScreen   = $('loadScreen');
+    const setupScreen  = $('setupScreen');
+    const webllmScreen = $('webllmScreen');
+    const errorScreen  = $('errorScreen');
+    const chatArea     = $('chatArea');
+    const messagesWrap = $('messagesWrap');
+    const welcomeMsg   = $('welcomeMsg');
+    const chatInput    = $('chatInput');
+    const sendBtn      = $('sendBtn');
+    const statusDot    = $('statusDot');
+    const statusText   = $('statusText');
+    const backendBadge = $('backendBadge');
+    const modelSelect  = $('modelSelect');
+    const modelSelectWrap = $('modelSelectWrap');
+    const tokenRate    = $('tokenRate');
+    const charCount    = $('charCount');
+    const progressFill = $('progressFill');
+    const progressText = $('progressText');
+    const btnClear     = $('btnClear');
+
+    let isStreaming  = false;
+    let streamStart  = 0;
+    let tokenCount   = 0;
+    let useWebLLM    = false;
+
+    // ── Marked.js (markdown rendering) ───────────────────────────────
+    const mScript = document.createElement('script');
+    mScript.src   = 'https://cdn.jsdelivr.net/npm/marked/marked.min.js';
+    mScript.onload = () => window.marked && marked.setOptions({ breaks: true, gfm: true });
+    document.head.appendChild(mScript);
+
+    // ── Show / Hide helpers ───────────────────────────────────────────
+    function showOnly(el) {
+      [loadScreen, setupScreen, webllmScreen, errorScreen, chatArea].forEach(e => {
+        e.classList.add('hidden');
+      });
+      el.classList.remove('hidden');
+    }
+
+    // ── Status dot helpers ────────────────────────────────────────────
+    function setStatus(state, text) {
+      statusDot.className = 'status-dot ' + state;
+      statusText.textContent = text;
+    }
+
+    // ── Start loading ─────────────────────────────────────────────────
+    function startLoad(forceWebLLM = false) {
+      useWebLLM = forceWebLLM;
+      showOnly(loadScreen);
+      setStatus('loading', 'Detecting backend...');
+      progressFill.style.width = '5%';
+      progressText.textContent = forceWebLLM ? 'Loading browser model...' : 'Checking Ollama...';
+
+      window.AITutor
+        .onProgress(({ pct, text, phase }) => {
+          progressFill.style.width = pct + '%';
+          progressText.textContent = text;
+
+          // Switch to WebLLM-specific screen if we're in webllm phase
+          if (phase === 'webllm' && !webllmScreen.classList.contains('active')) {
+            showOnly(webllmScreen);
+            $('webllmFill').style.width = pct + '%';
+            $('webllmText').textContent = text;
+            $('webllmPct').textContent  = pct + '%';
+          }
+          if (phase === 'webllm') {
+            $('webllmFill').style.width = pct + '%';
+            $('webllmText').textContent = text;
+            $('webllmPct').textContent  = pct + '%';
+          }
+          if (phase === 'pulling') showOnly(loadScreen);
+        })
+        .onReady(({ backend, model, models }) => {
+          showOnly(chatArea);
+          sendBtn.disabled = false;
+          btnClear.style.display = '';
+          chatInput.focus();
+
+          // Backend badge
+          if (backend === 'ollama') {
+            backendBadge.innerHTML = `<span class="badge-dot ollama-dot"></span>⚡ Ollama · Local`;
+            backendBadge.className = 'backend-badge ollama-badge';
+            setStatus('online', `Ready · ${model}`);
+
+            // Populate model selector
+            if (models && models.length > 1) {
+              modelSelect.innerHTML = models.map(m =>
+                `<option value="${m}" ${m.startsWith(model.split(':')[0]) ? 'selected' : ''}>${m}</option>`
+              ).join('');
+              modelSelectWrap.classList.remove('hidden');
+            }
+          } else {
+            backendBadge.innerHTML = `<span class="badge-dot webllm-dot"></span>🌐 Browser · WASM`;
+            backendBadge.className = 'backend-badge webllm-badge';
+            setStatus('online', `Ready · ${model.split('-').slice(0,2).join('-')}`);
+          }
+          backendBadge.classList.remove('hidden');
+        })
+        .onError(err => {
+          // If Ollama failed and we're not already in WebLLM mode, show setup
+          const info = window.AITutor.getInfo();
+          if (!info.isLoaded && info.backend !== 'webllm') {
+            showOnly(setupScreen);
+            setStatus('error', 'Ollama not found');
+          } else {
+            showOnly(errorScreen);
+            $('errorMsg').textContent = err.message || 'Unknown error. Check browser console.';
+            setStatus('error', 'Failed to load');
+          }
+        })
+        .load();
+    }
+
+    // Kick off detection
+    startLoad();
+
+    // ── Setup screen buttons ──────────────────────────────────────────
+    $('retryBtn').addEventListener('click', async () => {
+      showOnly(loadScreen);
+      setStatus('loading', 'Checking again...');
+      progressFill.style.width = '10%';
+      progressText.textContent = 'Pinging Ollama...';
+
+      // Re-create engine to reset state
+      window.AITutor.isLoaded  = false;
+      window.AITutor.isLoading = false;
+      window.AITutor._onProgress = null;
+      window.AITutor._onReady    = null;
+      window.AITutor._onError    = null;
+      startLoad(false);
+    });
+
+    $('webllmBtn').addEventListener('click', () => {
+      showOnly(webllmScreen);
+      $('webllmFill').style.width = '0%';
+      $('webllmText').textContent = 'Preparing browser model...';
+
+      // Force WebLLM by calling _initWebLLM directly
+      window.AITutor.isLoaded  = false;
+      window.AITutor.isLoading = false;
+      window.AITutor._onProgress = null;
+      window.AITutor._onReady    = null;
+      window.AITutor._onError    = null;
+
+      // Patch progress to update webllm screen
+      window.AITutor
+        .onProgress(({ pct, text }) => {
+          $('webllmFill').style.width = pct + '%';
+          $('webllmText').textContent = text;
+          $('webllmPct').textContent  = pct + '%';
+        })
+        .onReady(({ model }) => {
+          backendBadge.innerHTML = `<span class="badge-dot webllm-dot"></span>🌐 Browser · WASM`;
+          backendBadge.className = 'backend-badge webllm-badge';
+          backendBadge.classList.remove('hidden');
+          setStatus('online', `Ready · ${model.split('-')[0]}`);
+          showOnly(chatArea);
+          sendBtn.disabled = false;
+          btnClear.style.display = '';
+          chatInput.focus();
+        })
+        .onError(err => {
+          showOnly(errorScreen);
+          $('errorMsg').textContent = err.message || 'Browser model failed to load.';
+          setStatus('error', 'Failed');
+        });
+
+      window.AITutor.isLoading = true;
+      window.AITutor._initWebLLM();
+    });
+
+    $('errorRetryBtn').addEventListener('click', () => {
+      window.AITutor.isLoaded  = false;
+      window.AITutor.isLoading = false;
+      startLoad();
+    });
+
+    // ── Copy buttons in setup screen ──────────────────────────────────
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const src = document.getElementById(btn.dataset.copy);
+        navigator.clipboard.writeText(src.textContent.trim()).then(() => {
+          btn.innerHTML = '✓';
+          setTimeout(() => {
+            btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+          }, 1500);
+        });
+      });
+    });
+
+    // ── Model switcher ────────────────────────────────────────────────
+    modelSelect.addEventListener('change', () => {
+      window.AITutor.switchModel(modelSelect.value);
+      setStatus('online', `Ready · ${modelSelect.value}`);
+    });
+
+    // ── Clear chat ────────────────────────────────────────────────────
+    btnClear.addEventListener('click', () => {
+      if (isStreaming) return;
+      messagesWrap.innerHTML = '';
+      messagesWrap.appendChild(welcomeMsg);
+      welcomeMsg.classList.remove('hidden');
+      window.AITutor.resetChat();
+      tokenRate.classList.add('hidden');
+    });
+
+    // ── Quick prompts ─────────────────────────────────────────────────
+    $('quickPrompts').addEventListener('click', e => {
+      const btn = e.target.closest('.quick-btn');
+      if (!btn || isStreaming) return;
+      chatInput.value = btn.dataset.prompt;
+      chatInput.dispatchEvent(new Event('input'));
+      sendMessage();
+    });
+
+    // ── Textarea auto-resize ──────────────────────────────────────────
+    chatInput.addEventListener('input', () => {
+      chatInput.style.height = 'auto';
+      chatInput.style.height = Math.min(chatInput.scrollHeight, 140) + 'px';
+      charCount.textContent  = chatInput.value.length + '/2000';
+    });
+
+    chatInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        if (!sendBtn.disabled && chatInput.value.trim()) sendMessage();
+      }
+    });
+
+    sendBtn.addEventListener('click', () => {
+      if (!isStreaming && chatInput.value.trim()) sendMessage();
+    });
+
+    // ── Send message ──────────────────────────────────────────────────
+    async function sendMessage() {
+      const text = chatInput.value.trim();
+      if (!text || isStreaming || !window.AITutor.isLoaded) return;
+
+      welcomeMsg.classList.add('hidden');
+      isStreaming      = true;
+      sendBtn.disabled = true;
+      chatInput.value  = '';
+      chatInput.style.height = 'auto';
+      charCount.textContent  = '0/2000';
+      tokenCount = 0;
+      streamStart = Date.now();
+
+      addMessage('user', text);
+      const aiBubble = addMessage('ai', '', true);
+      scrollBottom();
+
+      try {
+        await window.AITutor.chat(
+          text,
+          (delta, full) => {
+            tokenCount++;
+            renderAI(aiBubble, full, true);
+            // Update token rate every 5 tokens
+            if (tokenCount % 5 === 0) {
+              const elapsed = (Date.now() - streamStart) / 1000;
+              const rate    = (tokenCount / elapsed).toFixed(1);
+              tokenRate.textContent = `${rate} tok/s`;
+              tokenRate.classList.remove('hidden');
+            }
+            scrollBottom();
+          },
+          full => {
+            renderAI(aiBubble, full, false);
+            scrollBottom();
+          }
+        );
+      } catch (err) {
+        renderAI(aiBubble, '⚠️ **Error:** ' + (err.message || 'Generation failed. Please try again.'), false);
+      } finally {
+        isStreaming      = false;
+        sendBtn.disabled = false;
+        chatInput.focus();
+      }
+    }
+
+    // ── Message bubble factory ────────────────────────────────────────
+    function addMessage(role, content, streaming = false) {
+      const isUser = role === 'user';
+      const now    = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+
+      const msg     = document.createElement('div');
+      msg.className = `msg ${isUser ? 'user' : 'ai'}`;
+
+      const av      = document.createElement('div');
+      av.className  = 'msg-avatar';
+      av.textContent = isUser ? '👤' : '🤖';
+
+      const ct      = document.createElement('div');
+      ct.className  = 'msg-content';
+
+      const bub     = document.createElement('div');
+      bub.className = `msg-bubble${streaming ? ' cursor-blink' : ''}`;
+      if (isUser) bub.textContent = content;
+      else bub.innerHTML = renderMd(content);
+
+      const ts      = document.createElement('div');
+      ts.className  = 'msg-time';
+      ts.textContent = now;
+
+      ct.appendChild(bub); ct.appendChild(ts);
+      msg.appendChild(av); msg.appendChild(ct);
+      messagesWrap.appendChild(msg);
+      return bub;
+    }
+
+    function renderAI(bubble, content, streaming) {
+      bubble.className = `msg-bubble${streaming ? ' cursor-blink' : ''}`;
+      bubble.innerHTML = renderMd(content);
+    }
+
+    function renderMd(text) {
+      if (!text) return '';
+      if (window.marked) {
+        try { return marked.parse(text); } catch { /* fall through */ }
+      }
+      return text
+        .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    }
+
+    function scrollBottom() {
+      messagesWrap.scrollTop = messagesWrap.scrollHeight;
+    }
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+# Java Build Artifacts
+*.class
+*.jar
+*.war
+*.ear
+out/
+build/
+target/
+bin/
+
+# AI Tutor Runtime (auto-generated, machine-specific)
+dsa-docs-site/.tutor-state
+dsa-docs-site/.ollama.pid
+dsa-docs-site/js/tutor-config.js
+
+# OS Files
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor & IDE
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# Logs
+*.log
+/tmp/
+
+# Node (if ever used)
+node_modules/
